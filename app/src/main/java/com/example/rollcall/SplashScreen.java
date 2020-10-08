@@ -10,8 +10,8 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Intent intent = new Intent(this, MainActivity.class);
+        setContentView(R.layout.loginlayout);
+        Intent intent = new Intent(this, LogInScreen.class);
         startActivity(intent);
         finish();
     }
