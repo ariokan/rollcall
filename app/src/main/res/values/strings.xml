@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">RollCall</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_camera">Camera</string>
+    <string name="title_settings">Settings</string>
 </resources>
