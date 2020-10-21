@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "698078166966",
+    "firebase_url": "https://rollcall-25731.firebaseio.com",
+    "project_id": "rollcall-25731",
+    "storage_bucket": "rollcall-25731.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:698078166966:android:faf20222eebc04bec98b17",
+        "android_client_info": {
+          "package_name": "com.example.rollcall"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "698078166966-bkvqaberle44qohbi1noluse3ngmadq2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rollcall",
+            "certificate_hash": "89d47f945269a6f721e17b3ca9b2e92ee838aeb2"
+          }
+        },
+        {
+          "client_id": "698078166966-5r9ep90ivdfjtsvr1gb3517t2obh9i42.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3KNfJU7H3GPMAht_DqnrwpmGDtYNotfI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "698078166966-5r9ep90ivdfjtsvr1gb3517t2obh9i42.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
