@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,25 +20,45 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LogInScreen extends AppCompatActivity {
     private FirebaseAuth mAuth;
+
+    //checks whete
+    public Boolean ValidateEmail (String mailadress){
+        if (!Patterns.EMAIL_ADDRESS.matcher(mailadress).matches() && mailadress.equals(""))
+            return false;
+        else
+            return true;
+    }
+    public Boolean ValidatePass(String pass){
+        if(pass.equals(""))
+            return false;
+        else
+            return true;
+    }
+
         @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loginlayout);
+        //initilazing
+        final EditText email =(EditText)findViewById(R.id.Email);
+        final EditText pass =(EditText)findViewById(R.id.Password);
+        final String mail =email.getText().toString().trim();
+        final String pass_= pass.getText().toString();
         Button LogIn =(Button) findViewById(R.id.LoginButton);
-           final EditText email =(EditText)findViewById(R.id.Email);
-           final EditText pass =(EditText)findViewById(R.id.Password);
+        //handling button click
         LogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAuth = FirebaseAuth.getInstance();
-                String mail =email.getText().toString();
-                if ( android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches() || email.getText().toString().equals("")) {
-                    Toast.makeText(LogInScreen.this, "You did not enter a email", Toast.LENGTH_SHORT).show();
-                }
-                else if (pass.getText().toString().equals("")) {
-                    Toast.makeText(LogInScreen.this, "You did not enter a password", Toast.LENGTH_SHORT).show();
-                }
 
+
+                String EmailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+                if(ValidateEmail(mail)) {
+                    Toast.makeText(LogInScreen.this, "You did not enter a email or not valid e-mail address", Toast.LENGTH_SHORT).show();
+                }
+                else if(ValidatePass(pass_)){
+                    Toast.makeText(LogInScreen.this, "You did not enter pass ", Toast.LENGTH_SHORT).show();
+                }
                 else {
                 mAuth.signInWithEmailAndPassword(email.getText().toString(), pass.getText().toString())
                         .addOnCompleteListener(LogInScreen.this, new OnCompleteListener<AuthResult>() {

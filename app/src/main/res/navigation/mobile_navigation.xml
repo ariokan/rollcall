@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_camera"
         android:name="com.example.rollcall.ui.Camera.CameraFragment"
         android:label="@string/title_camera"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_camera" />
 
     <fragment
         android:id="@+id/navigation_settings"
