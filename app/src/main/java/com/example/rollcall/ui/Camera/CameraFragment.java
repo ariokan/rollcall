@@ -1,9 +1,17 @@
 package com.example.rollcall.ui.Camera;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +30,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rollcall.R;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -33,6 +46,8 @@ public class CameraFragment extends Fragment {
     private CameraViewModel dashboardViewModel;
     Button button;
     private static final int Image_Capture_Code = 1;
+    private Context globalContext=null;
+    Bitmap photoSelect;
 
 
     private RecyclerView chatRecylerview;
@@ -56,29 +71,84 @@ public class CameraFragment extends Fragment {
                 textView.setText(s);
             }
         });
-
+        globalContext=this.getActivity();
         imagCapture = (ImageView) root.findViewById(R.id.imageView2);
         button = (Button) root.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent cInt = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cInt, Image_Capture_Code);
+
+                selectImage(getActivity());
+
+
+
             }
         });
+        photoSelect=BitmapFactory.decodeResource(getActivity().getApplicationContext().getResources(),R.drawable.ic_launcher_background);
+        imagCapture.setImageBitmap(photoSelect);
         return root;
     }
 
+    private void selectImage(Context context){
+        final CharSequence[] options={"Take photo","Choose from gallery","Cancel"};
+        AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
+        builder.setTitle("Choose your profile picture");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (options[item].equals("Take photo")) {
+                    Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(takePicture, 0);
+
+                } else if (options[item].equals("Choose from gallery")) {
+                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(pickPhoto , 1);
+
+                } else if (options[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+
+    }
+
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == Image_Capture_Code) {
-            if (resultCode == RESULT_OK) {
-                Bitmap bp = (Bitmap) data.getExtras().get("data");
-                imagCapture.setImageBitmap(bp);
-            } else if (requestCode == RESULT_CANCELED) {
-                Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_LONG).show();
-            }
 
+
+        if(resultCode != RESULT_CANCELED) {
+            switch (requestCode) {
+                case 0:
+                    if (resultCode == RESULT_OK && data != null) {
+                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                        imagCapture.setImageBitmap(selectedImage);
+                    }
+
+                    break;
+                case 1:
+                    if (resultCode == RESULT_OK && data != null ) {
+                        Uri selectedImage =  data.getData();
+
+                        try {
+                            photoSelect=MediaStore.Images.Media.getBitmap(globalContext.getContentResolver(),selectedImage);
+                            imagCapture.setImageBitmap(photoSelect);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                    break;
+            }
         }
+
     }
+
+
+
 }
