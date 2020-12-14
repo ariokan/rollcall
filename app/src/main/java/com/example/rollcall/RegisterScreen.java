@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ public class RegisterScreen extends AppCompatActivity {
     private EditText registerEmail;
     private EditText registerStudentNumber;
     private EditText registerPassword;
+    private Button registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,22 @@ public class RegisterScreen extends AppCompatActivity {
         setContentView(R.layout.register_layout);
         mAuth=FirebaseAuth.getInstance();
         registerName=findViewById(R.id.textName);
+        registerSurname=findViewById(R.id.textSurname);
+        registerEmail=findViewById(R.id.Email);
+        registerPassword=findViewById(R.id.textPassword);
+        registerStudentNumber=findViewById(R.id.StudentNumber);
+        registerButton=findViewById(R.id.registerButton);
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String name=registerName.getText().toString();
+                String surname=registerSurname.getText().toString();
+                String email=registerEmail.getText().toString();
+                String studentNumber=registerStudentNumber.getText().toString();
+                String password=registerPassword.getText().toString();
+            }
+        });
 
 
         studentPhoto=findViewById(R.id.student_photo);
