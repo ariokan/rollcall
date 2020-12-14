@@ -7,18 +7,30 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterScreen extends AppCompatActivity {
 
     ImageView studentPhoto;
     public static final int PICK_IMAGE = 1;
+    private FirebaseAuth mAuth;
+    private EditText registerName;
+    private EditText registerSurname;
+    private EditText registerEmail;
+    private EditText registerStudentNumber;
+    private EditText registerPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
+        mAuth=FirebaseAuth.getInstance();
+        registerName=findViewById(R.id.textName);
+
 
         studentPhoto=findViewById(R.id.student_photo);
         studentPhoto.setOnClickListener(new View.OnClickListener() {

@@ -36,7 +36,7 @@
             android:textStyle="bold"></TextView>
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/textName"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_margin="5dp"
@@ -56,7 +56,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editTextTextPersonName2"
+            android:id="@+id/textSurname"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_margin="5dp"
@@ -115,7 +115,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editTextTextPassword"
+            android:id="@+id/textPassword"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:ems="10"
