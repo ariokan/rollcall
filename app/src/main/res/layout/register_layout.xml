@@ -27,11 +27,10 @@
             app:srcCompat="@drawable/ic_baseline_person_24"
             tools:layout_editor_absoluteX="106dp"
             tools:layout_editor_absoluteY="41dp"
-<<<<<<< HEAD
-            tools:srcCompat="@tools:sample/avatars"></ImageView>
-=======
+
+            tools:srcCompat="@tools:sample/avatars"
             android:src="@drawable/ic_action_name"></de.hdodenhof.circleimageview.CircleImageView>
->>>>>>> d4ea1a7e61a70435c69ab30fea9f60242ea5c866
+
 
         <TextView
             android:layout_width="match_parent"
