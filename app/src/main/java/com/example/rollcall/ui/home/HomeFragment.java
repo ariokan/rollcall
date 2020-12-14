@@ -20,6 +20,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.rollcall.R;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class HomeFragment extends Fragment {
 
@@ -27,6 +28,7 @@ public class HomeFragment extends Fragment {
     ListView listView;
     SearchView searchView;
     ArrayAdapter<String> adapter;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     String[] courseName={"Veri Madenciliği","Bilişim Tasarım Projesi","Paralel Bilgisayarlar","Bulut Bilişim"};
     String[] teacherName={"Arzu Kakışım","Arzu Kakışım","Turgay Altılar","Alper Özpınar"};
     int images[]={R.drawable.ic_home_black_24dp};

@@ -10,6 +10,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -45,14 +46,15 @@ public class LogInScreen extends AppCompatActivity {
         final String mail =email.getText().toString().trim();
         final String pass_= pass.getText().toString();
         final Button LogIn =(Button) findViewById(R.id.LoginButton);
-        Button Register=(Button) findViewById(R.id.RegisterButton);
-        Register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent RegisterIntent=new Intent(LogInScreen.this,RegisterScreen.class);
-                startActivity(RegisterIntent);
-            }
-        });
+            TextView RegisterTextView =(TextView) findViewById(R.id.register_text);
+            RegisterTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent RegisterIntent=new Intent(LogInScreen.this,RegisterScreen.class);
+                    startActivity(RegisterIntent);
+                }
+            });
+
         //handling button click
         LogIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +80,7 @@ public class LogInScreen extends AppCompatActivity {
                                         Log.d("success", "signInWithEmail:success");
                                         FirebaseUser user = mAuth.getCurrentUser();
                                         Intent intent = new Intent(LogInScreen.this, MainActivity.class);
+                                        intent.putExtra("username",mail);
                                         startActivity(intent);
 
                                     } else {
