@@ -17,7 +17,8 @@
         tools:context=".LogInScreen">
 
 
-        <ImageView
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/student_photo"
             android:layout_width="148dp"
             android:layout_height="144dp"
@@ -26,7 +27,11 @@
             app:srcCompat="@drawable/ic_baseline_person_24"
             tools:layout_editor_absoluteX="106dp"
             tools:layout_editor_absoluteY="41dp"
+<<<<<<< HEAD
             tools:srcCompat="@tools:sample/avatars"></ImageView>
+=======
+            android:src="@drawable/ic_action_name"></de.hdodenhof.circleimageview.CircleImageView>
+>>>>>>> d4ea1a7e61a70435c69ab30fea9f60242ea5c866
 
         <TextView
             android:layout_width="match_parent"
