@@ -2,15 +2,18 @@
 <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:layout_marginTop="5dp">
     <LinearLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF"
         android:orientation="vertical"
+        android:layout_marginLeft="5dp"
+
         tools:context=".LogInScreen">
 
 
@@ -20,20 +23,26 @@
             android:layout_width="148dp"
             android:layout_height="144dp"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            app:srcCompat="@color/colorPrimary"
+
+            app:srcCompat="@drawable/ic_baseline_person_24"
             tools:layout_editor_absoluteX="106dp"
             tools:layout_editor_absoluteY="41dp"
+<<<<<<< HEAD
+            tools:srcCompat="@tools:sample/avatars"></ImageView>
+=======
             android:src="@drawable/ic_action_name"></de.hdodenhof.circleimageview.CircleImageView>
+>>>>>>> d4ea1a7e61a70435c69ab30fea9f60242ea5c866
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="First Name"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            android:textStyle="bold"></TextView>
+    <TextView
+        android:id="@+id/editTextTextPersonName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginStart="15dp"
+        android:text="First Name"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:textStyle="bold"></TextView>
 
         <EditText
             android:id="@+id/textName"
@@ -42,11 +51,11 @@
             android:layout_margin="5dp"
             android:ems="10"
             android:background="@drawable/custom_input_text"
-            android:hint="name"
+            android:hint=" Name"
             android:inputType="textPersonName" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/surname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
@@ -56,12 +65,16 @@
             android:textStyle="bold" />
 
         <EditText
+<<<<<<< HEAD
             android:id="@+id/textSurname"
+=======
+            android:id="@+id/surname"
+>>>>>>> de446a34722e8e9ebb9f5612ca262ac0e36a10a8
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_margin="5dp"
             android:ems="10"
-            android:hint="Last Name"
+            android:hint=" Last Name"
             android:background="@drawable/custom_input_text"
             android:inputType="textPersonName" />
 
@@ -76,12 +89,12 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/Email"
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_margin="5dp"
             android:ems="10"
-            android:hint="Email address"
+            android:hint=" Email address"
             android:background="@drawable/custom_input_text"
             android:inputType="textEmailAddress" />
 
@@ -90,8 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="Student Number :"
-            android:background="@drawable/custom_input_text"
+            android:text="Student Number"
             android:textColor="#000000"
             android:textStyle="bold" />
 
@@ -122,12 +134,34 @@
             android:inputType="textPassword"
             android:background="@drawable/custom_input_text"
             android:layout_margin="5dp"/>
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Password Again"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/editTextTextPassword2"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:background="@drawable/custom_input_text"
+            android:layout_margin="5dp"/>
 
         <Button
+<<<<<<< HEAD
             android:id="@+id/registerButton"
+=======
+            android:id="@+id/rbtn"
+>>>>>>> de446a34722e8e9ebb9f5612ca262ac0e36a10a8
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="30dp"
             android:text="Register"
             android:layout_margin="5dp"></Button>
 
