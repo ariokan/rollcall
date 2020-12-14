@@ -27,14 +27,14 @@
             app:srcCompat="@drawable/ic_baseline_person_24"
             tools:layout_editor_absoluteX="106dp"
             tools:layout_editor_absoluteY="41dp"
-<<<<<<< HEAD
-            tools:srcCompat="@tools:sample/avatars"></ImageView>
-=======
-            android:src="@drawable/ic_action_name"></de.hdodenhof.circleimageview.CircleImageView>
->>>>>>> d4ea1a7e61a70435c69ab30fea9f60242ea5c866
+
+            tools:srcCompat="@tools:sample/avatars"
+            >
+
+        android:src="@drawable/ic_action_name"></de.hdodenhof.circleimageview.CircleImageView>
+
 
     <TextView
-        android:id="@+id/editTextTextPersonName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -44,128 +44,120 @@
         android:textSize="14sp"
         android:textStyle="bold"></TextView>
 
-        <EditText
-            android:id="@+id/textName"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_margin="5dp"
-            android:ems="10"
-            android:background="@drawable/custom_input_text"
-            android:hint=" Name"
-            android:inputType="textPersonName" />
+    <EditText
+        android:id="@+id/editTextTextPersonName"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
+        android:ems="10"
+        android:background="@drawable/custom_input_text"
+        android:hint=" Name"
+        android:inputType="textPersonName" />
 
-        <TextView
-            android:id="@+id/surname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_margin="5dp"
-            android:text="Last Name"
-            android:textColor="#000000"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_margin="5dp"
+        android:text="Last Name"
+        android:textColor="#000000"
+        android:textStyle="bold" />
 
-        <EditText
-<<<<<<< HEAD
-            android:id="@+id/textSurname"
-=======
-            android:id="@+id/surname"
->>>>>>> de446a34722e8e9ebb9f5612ca262ac0e36a10a8
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_margin="5dp"
-            android:ems="10"
-            android:hint=" Last Name"
-            android:background="@drawable/custom_input_text"
-            android:inputType="textPersonName" />
+    <EditText
+        android:id="@+id/surname"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
+        android:ems="10"
+        android:hint=" Last Name"
+        android:background="@drawable/custom_input_text"
+        android:inputType="textPersonName" />
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="Email:"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Email:"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/email"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_margin="5dp"
-            android:ems="10"
-            android:hint=" Email address"
-            android:background="@drawable/custom_input_text"
-            android:inputType="textEmailAddress" />
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
+        android:ems="10"
+        android:hint=" Email address"
+        android:background="@drawable/custom_input_text"
+        android:inputType="textEmailAddress" />
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="Student Number"
-            android:textColor="#000000"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Student Number"
+        android:textColor="#000000"
+        android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/StudentNumber"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_margin="5dp"
-            android:ems="10"
-            android:hint="Student Number"
-            android:background="@drawable/custom_input_text"
-            android:inputType="number" />
+    <EditText
+        android:id="@+id/StudentNumber"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
+        android:ems="10"
+        android:hint="Student Number"
+        android:background="@drawable/custom_input_text"
+        android:inputType="number" />
 
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="Password"
-            android:textColor="#000000"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Password"
+        android:textColor="#000000"
+        android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:background="@drawable/custom_input_text"
-            android:layout_margin="5dp"/>
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="Password Again"
-            android:textColor="#000000"
-            android:textStyle="bold" />
+    <EditText
+        android:id="@+id/editTextTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:background="@drawable/custom_input_text"
+        android:layout_margin="5dp"/>
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Password Again"
+        android:textColor="#000000"
+        android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editTextTextPassword2"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:background="@drawable/custom_input_text"
-            android:layout_margin="5dp"/>
+    <EditText
+        android:id="@+id/editTextTextPassword2"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:background="@drawable/custom_input_text"
+        android:layout_margin="5dp"/>
 
-        <Button
-<<<<<<< HEAD
-            android:id="@+id/registerButton"
-=======
-            android:id="@+id/rbtn"
->>>>>>> de446a34722e8e9ebb9f5612ca262ac0e36a10a8
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:text="Register"
-            android:layout_margin="5dp"></Button>
+    <Button
+        android:id="@+id/rbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:text="Register"
+        android:layout_margin="5dp"></Button>
 
 
-    </LinearLayout>
+</LinearLayout>
 
-</ScrollView>
+    </ScrollView>

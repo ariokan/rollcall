@@ -20,26 +20,24 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RegisterScreen extends AppCompatActivity {
 
     public static final int PICK_IMAGE = 1;
-<<<<<<< HEAD
-    private FirebaseAuth mAuth;
-    private EditText registerName;
-    private EditText registerSurname;
-    private EditText registerEmail;
-    private EditText registerStudentNumber;
-    private EditText registerPassword;
-    private Button registerButton;
-=======
+
     private FirebaseFirestore db;
     private FirebaseAuth myAuth ;
     ImageView studentPhoto;
@@ -69,7 +67,7 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
                 return false;
     }
     else if(TextUtils.equals(Pass1,Pass2)&&TextUtils.isEmpty(Pass1)){
->>>>>>> de446a34722e8e9ebb9f5612ca262ac0e36a10a8
+
 
         return true;
     }
@@ -80,26 +78,7 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
 
     super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
-/*
-        mAuth=FirebaseAuth.getInstance();
-        registerName=findViewById(R.id.textName);
-        registerSurname=findViewById(R.id.textSurname);
-        registerEmail=findViewById(R.id.Email);
-        registerPassword=findViewById(R.id.textPassword);
-        registerStudentNumber=findViewById(R.id.StudentNumber);
-        registerButton=findViewById(R.id.registerButton);
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                String name=registerName.getText().toString();
-                String surname=registerSurname.getText().toString();
-                String email=registerEmail.getText().toString();
-                String studentNumber=registerStudentNumber.getText().toString();
-                String password=registerPassword.getText().toString();
-            }
-        });
-=======*/
         myAuth = FirebaseAuth.getInstance();
         final EditText name = (EditText) findViewById(R.id.editTextTextPersonName);
         final EditText surname = (EditText) findViewById(R.id.surname);
@@ -142,9 +121,36 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
                                         FirebaseUser user = myAuth.getCurrentUser();
                                         Toast.makeText(RegisterScreen.this, "Authentication success.",
                                                 Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(RegisterScreen.this, MainActivity.class);
+                                        final Intent intent = new Intent(RegisterScreen.this, MainActivity.class);
+                                        Map<String, Object> userData = new HashMap<>();
+                                        userData.put("firstName", Name);
+                                        userData.put("lastName", Surname);
+                                        userData.put("mail", Mail);
+                                        userData.put("studentNumber", Stdonumber);
+                                        userData.put("password", Pass1);
 
-                                        startActivity(intent);
+                                        // Add a new document with a generated ID
+                                        db.collection("users")
+                                                .add(userData)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        Log.d("user_data_save", "DocumentSnapshot added with ID: " + documentReference.getId());
+                                                        Toast.makeText(RegisterScreen.this, "Firestore success.",
+                                                                Toast.LENGTH_SHORT).show();
+                                                        startActivity(intent);
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w("user_data_save_failed", "Error adding document", e);
+                                                        Toast.makeText(RegisterScreen.this, "Firestore failed.",
+                                                                Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+
+
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Log.w("failed", "createUserWithEmail:failure", task.getException());
@@ -156,9 +162,12 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
                                 }
                             });
                 }
+
             }
         });
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
