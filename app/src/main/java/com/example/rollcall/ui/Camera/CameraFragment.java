@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -29,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rollcall.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,6 +40,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -47,7 +52,9 @@ public class CameraFragment extends Fragment {
     Button button;
     private static final int Image_Capture_Code = 1;
     private Context globalContext=null;
-    Bitmap photoSelect;
+    private Bitmap photoSelect;
+    private Uri imageUri;
+    private FirebaseAuth mAuth;
 
 
     private RecyclerView chatRecylerview;
@@ -56,7 +63,7 @@ public class CameraFragment extends Fragment {
     LinearLayoutManager manager;
     ArrayList<HashMap<String, String>> userDetail = new ArrayList<>();
     HashMap<String, String> data;
-    ImageView imagCapture;
+    private CircleImageView imagCapture;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -72,7 +79,10 @@ public class CameraFragment extends Fragment {
             }
         });
         globalContext=this.getActivity();
-        imagCapture = (ImageView) root.findViewById(R.id.imageView2);
+        mAuth=FirebaseAuth.getInstance();
+        String user_id=mAuth.getCurrentUser().getUid();
+
+        imagCapture = (CircleImageView) root.findViewById(R.id.circleImage);
         button = (Button) root.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,8 +94,6 @@ public class CameraFragment extends Fragment {
 
             }
         });
-        photoSelect=BitmapFactory.decodeResource(getActivity().getApplicationContext().getResources(),R.drawable.ic_launcher_background);
-        imagCapture.setImageBitmap(photoSelect);
         return root;
     }
 

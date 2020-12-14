@@ -14,7 +14,8 @@
         tools:context=".LogInScreen">
 
 
-        <ImageView
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/student_photo"
             android:layout_width="148dp"
             android:layout_height="144dp"
@@ -22,7 +23,8 @@
             android:layout_marginTop="20dp"
             app:srcCompat="@color/colorPrimary"
             tools:layout_editor_absoluteX="106dp"
-            tools:layout_editor_absoluteY="41dp"></ImageView>
+            tools:layout_editor_absoluteY="41dp"
+            android:src="@drawable/ic_action_name"></de.hdodenhof.circleimageview.CircleImageView>
 
         <TextView
             android:layout_width="match_parent"
