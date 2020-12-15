@@ -1,6 +1,7 @@
 package com.example.rollcall.ui.Camera;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,7 +32,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rollcall.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,6 +47,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -53,11 +61,13 @@ public class CameraFragment extends Fragment {
     private static final int Image_Capture_Code = 1;
     private Context globalContext=null;
     private Bitmap photoSelect;
-    private Uri imageUri;
+    private Uri selectedImage;
     private FirebaseAuth mAuth;
+    StorageReference storageReference;
+    Button saveButton;
 
 
-    private RecyclerView chatRecylerview;
+
     View view;
 
     LinearLayoutManager manager;
@@ -81,6 +91,7 @@ public class CameraFragment extends Fragment {
         globalContext=this.getActivity();
         mAuth=FirebaseAuth.getInstance();
         String user_id=mAuth.getCurrentUser().getUid();
+        storageReference= FirebaseStorage.getInstance().getReference();
 
         imagCapture = (CircleImageView) root.findViewById(R.id.circleImage);
         button = (Button) root.findViewById(R.id.button);
@@ -92,8 +103,17 @@ public class CameraFragment extends Fragment {
 
 
 
+
             }
         });
+        saveButton=(Button) root.findViewById(R.id.button2);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadImage();
+            }
+        });
+
         return root;
     }
 
@@ -123,6 +143,62 @@ public class CameraFragment extends Fragment {
 
     }
 
+    private void uploadImage()
+    {
+        if (selectedImage != null) {
+
+            // Code for showing progressDialog while uploading
+            final ProgressDialog progressDialog
+                    = new ProgressDialog(globalContext);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            // Defining the child of storageReference
+            StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+
+            // adding listeners on upload
+            // or failure of image
+            ref.putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+                                @Override
+                                public void onSuccess(
+                                        UploadTask.TaskSnapshot taskSnapshot)
+                                {
+
+                                    // Image uploaded successfully
+                                    // Dismiss dialog
+                                    progressDialog.dismiss();
+                                    Toast.makeText(globalContext,
+                                                    "Image Uploaded!!",
+                                                    Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e)
+                        {
+
+                            // Error, Image not uploaded
+                            progressDialog.dismiss();
+                            Toast.makeText(globalContext,"Failed"+e.getMessage(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(globalContext, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(
+                            new OnProgressListener<UploadTask.TaskSnapshot>() {
+
+                                // Progress Listener for loading
+                                // percentage on the dialog box
+                                @Override
+                                public void onProgress(UploadTask.TaskSnapshot taskSnapshot)
+                                {
+                                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                                    progressDialog.setMessage("Uploaded " + (int)progress + "%");
+                                }
+                            });
+        }
+    }
+
 
 
     @Override
@@ -140,7 +216,7 @@ public class CameraFragment extends Fragment {
                     break;
                 case 1:
                     if (resultCode == RESULT_OK && data != null ) {
-                        Uri selectedImage =  data.getData();
+                         selectedImage =  data.getData();
 
                         try {
                             photoSelect=MediaStore.Images.Media.getBitmap(globalContext.getContentResolver(),selectedImage);
