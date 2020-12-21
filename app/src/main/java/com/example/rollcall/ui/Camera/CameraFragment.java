@@ -90,8 +90,6 @@ public class CameraFragment extends Fragment {
 
                 selectImage(getActivity());
 
-
-
             }
         });
         return root;
