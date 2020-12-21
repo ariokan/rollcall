@@ -1,5 +1,6 @@
 package com.example.rollcall.ui.Camera;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -25,12 +26,14 @@ import android.widget.Toast;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.rollcall.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,6 +42,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -64,7 +68,7 @@ public class CameraFragment extends Fragment {
     private Uri selectedImage;
     private FirebaseAuth mAuth;
     StorageReference storageReference;
-    Button saveButton;
+
 
 
 
@@ -94,10 +98,12 @@ public class CameraFragment extends Fragment {
         storageReference= FirebaseStorage.getInstance().getReference();
 
         imagCapture = (CircleImageView) root.findViewById(R.id.circleImage);
+
         button = (Button) root.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
                 selectImage(getActivity());
 
@@ -106,13 +112,7 @@ public class CameraFragment extends Fragment {
 
             }
         });
-        saveButton=(Button) root.findViewById(R.id.button2);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadImage();
-            }
-        });
+
 
         return root;
     }
@@ -130,9 +130,12 @@ public class CameraFragment extends Fragment {
                     Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(takePicture, 0);
 
+
                 } else if (options[item].equals("Choose from gallery")) {
                     Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(pickPhoto , 1);
+
+
 
                 } else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
@@ -152,9 +155,9 @@ public class CameraFragment extends Fragment {
                     = new ProgressDialog(globalContext);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
-
+            String user_id=mAuth.getCurrentUser().getUid();
             // Defining the child of storageReference
-            StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+            StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString()).child(user_id);
 
             // adding listeners on upload
             // or failure of image
@@ -211,6 +214,8 @@ public class CameraFragment extends Fragment {
                     if (resultCode == RESULT_OK && data != null) {
                         Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
                         imagCapture.setImageBitmap(selectedImage);
+                        uploadImage();
+                        Glide.with(getActivity()).load(imagCapture).into(imagCapture);
                     }
 
                     break;
@@ -221,6 +226,8 @@ public class CameraFragment extends Fragment {
                         try {
                             photoSelect=MediaStore.Images.Media.getBitmap(globalContext.getContentResolver(),selectedImage);
                             imagCapture.setImageBitmap(photoSelect);
+                            uploadImage();
+                            Glide.with(getActivity()).load(imagCapture).into(imagCapture);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -230,6 +237,7 @@ public class CameraFragment extends Fragment {
                     break;
             }
         }
+
 
     }
 

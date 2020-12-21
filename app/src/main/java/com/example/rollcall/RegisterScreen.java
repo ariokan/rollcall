@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,9 +31,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class RegisterScreen extends AppCompatActivity {
 
@@ -41,6 +47,9 @@ public class RegisterScreen extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth myAuth ;
     ImageView studentPhoto;
+    private Uri imageData;
+    StorageReference storageReference;
+
 
 
 
@@ -79,6 +88,7 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
     super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
 
+
         myAuth = FirebaseAuth.getInstance();
         final EditText name = (EditText) findViewById(R.id.editTextTextPersonName);
         final EditText surname = (EditText) findViewById(R.id.surname);
@@ -86,6 +96,7 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
         final EditText stdonumber = (EditText) findViewById(R.id.StudentNumber);
         final  EditText pass1 =(EditText)findViewById(R.id.editTextTextPassword);
         final  EditText pass2 =(EditText)findViewById(R.id.editTextTextPassword2);
+        storageReference= FirebaseStorage.getInstance().getReference();
 
 
 
@@ -99,6 +110,7 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+
             }
         });
         rbtn.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +141,7 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
                                         userData.put("studentNumber", Stdonumber);
                                         userData.put("password", Pass1);
 
+
                                         // Add a new document with a generated ID
                                         db.collection("users")
                                                 .add(userData)
@@ -138,7 +151,10 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
                                                         Log.d("user_data_save", "DocumentSnapshot added with ID: " + documentReference.getId());
                                                         Toast.makeText(RegisterScreen.this, "Firestore success.",
                                                                 Toast.LENGTH_SHORT).show();
+                                                        uploadImage();
+
                                                         startActivity(intent);
+
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
@@ -168,13 +184,71 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
     }
 
 
+    private void uploadImage()
+    {
+        if (imageData != null) {
+
+            // Code for showing progressDialog while uploading
+            final ProgressDialog progressDialog
+                    = new ProgressDialog(RegisterScreen.this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+            String user_id=myAuth.getCurrentUser().getUid();
+            // Defining the child of storageReference
+            StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString()).child(user_id);
+
+            // adding listeners on upload
+            // or failure of image
+            ref.putFile(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+                @Override
+                public void onSuccess(
+                        UploadTask.TaskSnapshot taskSnapshot)
+                {
+
+                    // Image uploaded successfully
+                    // Dismiss dialog
+                    progressDialog.dismiss();
+                    Toast.makeText(RegisterScreen.this,
+                            "Image Uploaded!!",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e)
+                {
+
+                    // Error, Image not uploaded
+                    progressDialog.dismiss();
+                    Toast.makeText(RegisterScreen.this,"Failed"+e.getMessage(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterScreen.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            })
+                    .addOnProgressListener(
+                            new OnProgressListener<UploadTask.TaskSnapshot>() {
+
+                                // Progress Listener for loading
+                                // percentage on the dialog box
+                                @Override
+                                public void onProgress(UploadTask.TaskSnapshot taskSnapshot)
+                                {
+                                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                                    progressDialog.setMessage("Uploaded " + (int)progress + "%");
+                                }
+                            });
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null){
-            Uri imageData = data.getData();
+            imageData = data.getData();
 
             studentPhoto.setImageURI(imageData);
+
+
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class LogInScreen extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
-    //checks whete
+    //checks where
     public Boolean ValidateEmail (String mailadress){
         if (!Patterns.EMAIL_ADDRESS.matcher(mailadress).matches() && mailadress.equals(""))
             return false;
