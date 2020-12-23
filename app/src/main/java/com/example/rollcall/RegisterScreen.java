@@ -195,7 +195,8 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
             progressDialog.show();
             String user_id=myAuth.getCurrentUser().getUid();
             // Defining the child of storageReference
-            StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString()).child(user_id);
+            StorageReference ref = storageReference.child("images/"+user_id );
+
 
             // adding listeners on upload
             // or failure of image
