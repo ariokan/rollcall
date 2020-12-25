@@ -148,7 +148,9 @@ public class CameraFragment extends Fragment {
             progressDialog.show();
 
             // Defining the child of storageReference
+
             StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+
 
             // adding listeners on upload
             // or failure of image
