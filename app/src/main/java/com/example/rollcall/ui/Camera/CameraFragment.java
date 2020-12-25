@@ -106,14 +106,7 @@ public class CameraFragment extends Fragment {
 
             }
         });
-        saveButton=(Button) root.findViewById(R.id.button2);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadImage();
 
-            }
-        });
 
         return root;
     }

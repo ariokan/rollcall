@@ -5,17 +5,19 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_gravity="center"
-    android:layout_marginTop="5dp">
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="40dp"
+    >
+
     <LinearLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
         android:background="#FFFFFF"
         android:orientation="vertical"
-        android:layout_marginLeft="5dp"
 
         tools:context=".LogInScreen">
-
 
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -24,12 +26,12 @@
             android:layout_height="144dp"
             android:layout_gravity="center"
 
+            android:src="@drawable/ic_action_name"
             app:srcCompat="@drawable/ic_baseline_person_24"
             tools:layout_editor_absoluteX="106dp"
-            tools:layout_editor_absoluteY="41dp"
 
-            tools:srcCompat="@tools:sample/avatars"
-            android:src="@drawable/ic_action_name"></de.hdodenhof.circleimageview.CircleImageView>
+            tools:layout_editor_absoluteY="41dp"
+            tools:srcCompat="@tools:sample/avatars"></de.hdodenhof.circleimageview.CircleImageView>
 
 
         <TextView
@@ -47,8 +49,8 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_margin="5dp"
-            android:ems="10"
             android:background="@drawable/custom_input_text"
+            android:ems="10"
             android:hint=" Name"
             android:inputType="textPersonName" />
 
@@ -67,9 +69,9 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_margin="5dp"
+            android:background="@drawable/custom_input_text"
             android:ems="10"
             android:hint=" Last Name"
-            android:background="@drawable/custom_input_text"
             android:inputType="textPersonName" />
 
         <TextView
@@ -87,9 +89,9 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_margin="5dp"
+            android:background="@drawable/custom_input_text"
             android:ems="10"
             android:hint=" Email address"
-            android:background="@drawable/custom_input_text"
             android:inputType="textEmailAddress" />
 
         <TextView
@@ -101,60 +103,39 @@
             android:textColor="#000000"
             android:textStyle="bold" />
 
-        <EditText
+        <TextView
             android:id="@+id/StudentNumber"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_margin="5dp"
-            android:ems="10"
-            android:hint="Student Number"
-            android:background="@drawable/custom_input_text"
-            android:inputType="number" />
+            android:text="Student number"
+            android:textColor="#000000" />
 
-        <TextView
-            android:id="@+id/textView5"
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="Password"
-            android:textColor="#000000"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
+            <Button
+                android:id="@+id/Goback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="100dp"
+                android:text="Go Back"></Button>
+            <Button
+                android:id="@+id/ApplyChanges"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="100dp"
+                android:text="Apply Changes"></Button>
 
-        <EditText
-            android:id="@+id/editTextTextPassword"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:background="@drawable/custom_input_text"
-            android:layout_margin="5dp"/>
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="Password Again"
-            android:textColor="#000000"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/editTextTextPassword2"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:background="@drawable/custom_input_text"
-            android:layout_margin="5dp"/>
-
-        <Button
-            android:id="@+id/rbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:text="Register"
-            android:layout_margin="5dp"></Button>
-
+        </LinearLayout>
 
     </LinearLayout>
 

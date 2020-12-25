@@ -31,7 +31,10 @@ public class HomeFragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String[] courseName={"Veri Madenciliği","Bilişim Tasarım Projesi","Paralel Bilgisayarlar","Bulut Bilişim"};
     String[] teacherName={"Arzu Kakışım","Arzu Kakışım","Turgay Altılar","Alper Özpınar"};
+    String[] courseCode={"BIL235","BIL222","BIL131","BIL333"};
     int images[]={R.drawable.ic_home_black_24dp};
+
+
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -51,6 +54,7 @@ public class HomeFragment extends Fragment {
 
         listView=(ListView)root.findViewById(R.id.listView1);
         adapter=new ArrayAdapter<String >(getActivity(),android.R.layout.simple_list_item_1,courseName);
+
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -64,6 +68,8 @@ public class HomeFragment extends Fragment {
 
         return root;
     }
+
+
 
 
 }
