@@ -49,6 +49,7 @@ public class RegisterScreen extends AppCompatActivity {
     ImageView studentPhoto;
     private Uri imageData;
     StorageReference storageReference;
+    String user_id;
 
 
 
@@ -97,6 +98,7 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
         final  EditText pass1 =(EditText)findViewById(R.id.editTextTextPassword);
         final  EditText pass2 =(EditText)findViewById(R.id.editTextTextPassword2);
         storageReference= FirebaseStorage.getInstance().getReference();
+        user_id=myAuth.getCurrentUser().getUid();
 
 
 
@@ -192,7 +194,7 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
                     = new ProgressDialog(RegisterScreen.this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
-            String user_id=myAuth.getCurrentUser().getUid();
+
             // Defining the child of storageReference
             StorageReference ref = storageReference.child("images/"+user_id );
 

@@ -207,6 +207,7 @@ public class CameraFragment extends Fragment {
                     if (resultCode == RESULT_OK && data != null) {
                         Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
                         imagCapture.setImageBitmap(selectedImage);
+                        uploadImage();
                     }
 
                     break;
@@ -217,6 +218,7 @@ public class CameraFragment extends Fragment {
                         try {
                             photoSelect=MediaStore.Images.Media.getBitmap(globalContext.getContentResolver(),selectedImage);
                             imagCapture.setImageBitmap(photoSelect);
+                            uploadImage();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
