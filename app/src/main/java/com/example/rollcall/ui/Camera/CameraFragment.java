@@ -65,7 +65,7 @@ public class CameraFragment extends Fragment {
     private FirebaseAuth mAuth;
     StorageReference storageReference;
     Button saveButton;
-
+    String user_id;
 
 
     View view;
@@ -90,7 +90,7 @@ public class CameraFragment extends Fragment {
         });
         globalContext=this.getActivity();
         mAuth=FirebaseAuth.getInstance();
-        String user_id=mAuth.getCurrentUser().getUid();
+        user_id=mAuth.getCurrentUser().getUid();
         storageReference= FirebaseStorage.getInstance().getReference();
 
         imagCapture = (CircleImageView) root.findViewById(R.id.circleImage);
@@ -149,7 +149,7 @@ public class CameraFragment extends Fragment {
 
             // Defining the child of storageReference
 
-            StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+            StorageReference ref = storageReference.child("images/" + user_id).child(UUID.randomUUID().toString());
 
 
             // adding listeners on upload
