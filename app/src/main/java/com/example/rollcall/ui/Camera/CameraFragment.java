@@ -92,6 +92,8 @@ public class CameraFragment extends Fragment {
         mAuth=FirebaseAuth.getInstance();
         user_id=mAuth.getCurrentUser().getUid();
         storageReference= FirebaseStorage.getInstance().getReference();
+        TextView textcam=(TextView)root.findViewById(R.id.text_camera);
+        textcam.setText(user_id);
 
         imagCapture = (CircleImageView) root.findViewById(R.id.circleImage);
         button = (Button) root.findViewById(R.id.button);

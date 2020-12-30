@@ -55,6 +55,7 @@ public class RegisterScreen extends AppCompatActivity {
 
 
 
+
 protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,String surname, String stdonumber){
     if(TextUtils.isEmpty(Mail)){
         Toast.makeText(RegisterScreen.this, "Please Enter Your mail address.",
@@ -118,6 +119,11 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
         rbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //
+
+                //
+
                 final String Surname=surname.getText().toString();
                 final String Mail = mail.getText().toString();
                 final String Stdonumber = stdonumber.getText().toString();
@@ -143,16 +149,45 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
                                         userData.put("studentNumber", Stdonumber);
                                         userData.put("password", Pass1);
 
+                                      /*  db.collection("deneme").document(user_id).set(userData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d("user_data_save", "DocumentSnapshot successfully written!");
+                                                Toast.makeText(RegisterScreen.this, "Firestore success.",
+                                                        Toast.LENGTH_SHORT).show();
+                                                uploadImage();
+                                                startActivity(intent);
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w("user_data_save_failed", "Error writing document", e);
+                                                Toast.makeText(RegisterScreen.this, "Firestore failed.",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+                                        });*/
+
+
+                                       /* DocumentReference newCityRef = db.collection("cities").document();
+
+
+                                        newCityRef.set(userData);
+                                        Toast.makeText(RegisterScreen.this, "Firestore success.",
+                                                Toast.LENGTH_SHORT).show();
+                                        startActivity(intent);*/
                                         // Add a new document with a generated ID
-                                        db.collection("users")
+                                       db.collection("users")
                                                 .add(userData)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
                                                         Log.d("user_data_save", "DocumentSnapshot added with ID: " + documentReference.getId());
+
                                                         Toast.makeText(RegisterScreen.this, "Firestore success.",
                                                                 Toast.LENGTH_SHORT).show();
+
                                                         uploadImage();
+                                                        System.out.println(documentReference.getId());
 
                                                         startActivity(intent);
 
@@ -196,7 +231,7 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
             progressDialog.show();
 
             // Defining the child of storageReference
-            StorageReference ref = storageReference.child("images/"+user_id );
+            StorageReference ref = storageReference.child("images/"+user_id ).child(UUID.randomUUID().toString());
 
 
             // adding listeners on upload
