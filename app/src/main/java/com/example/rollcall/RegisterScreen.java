@@ -20,6 +20,7 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.rollcall.ui.home.HomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -55,42 +56,43 @@ public class RegisterScreen extends AppCompatActivity {
 
 
 
-protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,String surname, String stdonumber){
-    if(TextUtils.isEmpty(Mail)){
-        Toast.makeText(RegisterScreen.this, "Please Enter Your mail address.",
-                Toast.LENGTH_SHORT).show();
-                return false;
-    }
-    else if(TextUtils.isEmpty(name)){
-        Toast.makeText(RegisterScreen.this, "Please Enter Your Firstname.",
-                Toast.LENGTH_SHORT).show();
-                return false;
-    }
-    else if( TextUtils.isEmpty(surname)){
-        Toast.makeText(RegisterScreen.this, "Please Enter Your Lastname.",
-                Toast.LENGTH_SHORT).show();
-                return false;
-    }
-    else if(TextUtils.isEmpty(stdonumber) ){
-        Toast.makeText(RegisterScreen.this, "Please Enter Your Student number.",
-                Toast.LENGTH_SHORT).show();
-                return false;
-    }
-    else if(TextUtils.equals(Pass1,Pass2)&&TextUtils.isEmpty(Pass1)){
+    protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,String surname, String stdonumber){
+        if(TextUtils.isEmpty(Mail)){
+            Toast.makeText(RegisterScreen.this, "Please Enter Your mail address.",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(TextUtils.isEmpty(name)){
+            Toast.makeText(RegisterScreen.this, "Please Enter Your Firstname.",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if( TextUtils.isEmpty(surname)){
+            Toast.makeText(RegisterScreen.this, "Please Enter Your Lastname.",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(TextUtils.isEmpty(stdonumber) ){
+            Toast.makeText(RegisterScreen.this, "Please Enter Your Student number.",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if(TextUtils.equals(Pass1,Pass2)&&TextUtils.isEmpty(Pass1)){
 
 
+            return true;
+        }
         return true;
     }
-    return true;
-}
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-    super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
 
 
         myAuth = FirebaseAuth.getInstance();
+
         final EditText name = (EditText) findViewById(R.id.editTextTextPersonName);
         final EditText surname = (EditText) findViewById(R.id.surname);
         final EditText mail = (EditText) findViewById(R.id.email);
@@ -98,7 +100,7 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
         final  EditText pass1 =(EditText)findViewById(R.id.editTextTextPassword);
         final  EditText pass2 =(EditText)findViewById(R.id.editTextTextPassword2);
         storageReference= FirebaseStorage.getInstance().getReference();
-        user_id=myAuth.getCurrentUser().getUid();
+
 
 
 
@@ -136,36 +138,14 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
                                         Toast.makeText(RegisterScreen.this, "Authentication success.",
                                                 Toast.LENGTH_SHORT).show();
                                         final Intent intent = new Intent(RegisterScreen.this, MainActivity.class);
-                                        Map<String, Object> userData = new HashMap<>();
-                                        userData.put("firstName", Name);
-                                        userData.put("lastName", Surname);
-                                        userData.put("mail", Mail);
-                                        userData.put("studentNumber", Stdonumber);
-                                        userData.put("password", Pass1);
 
-                                        // Add a new document with a generated ID
-                                        db.collection("users")
-                                                .add(userData)
-                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                    @Override
-                                                    public void onSuccess(DocumentReference documentReference) {
-                                                        Log.d("user_data_save", "DocumentSnapshot added with ID: " + documentReference.getId());
-                                                        Toast.makeText(RegisterScreen.this, "Firestore success.",
-                                                                Toast.LENGTH_SHORT).show();
-                                                        uploadImage();
-
-                                                        startActivity(intent);
-
-                                                    }
-                                                })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Log.w("user_data_save_failed", "Error adding document", e);
-                                                        Toast.makeText(RegisterScreen.this, "Firestore failed.",
-                                                                Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
+                                        intent.putExtra("name",Name);
+                                        intent.putExtra("surname",Surname);
+                                        intent.putExtra("mail",Mail);
+                                        intent.putExtra("stdonumber",Stdonumber);
+                                        intent.putExtra("pass1",Pass1);
+                                        uploadImage();
+                                        startActivity(intent);
 
 
                                     } else {
@@ -194,9 +174,10 @@ protected Boolean IsDataValid(String Mail,String Pass1,String Pass2,String name,
                     = new ProgressDialog(RegisterScreen.this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
+            user_id=myAuth.getCurrentUser().getUid();
 
             // Defining the child of storageReference
-            StorageReference ref = storageReference.child("images/"+user_id );
+            StorageReference ref = storageReference.child("images/" ).child(user_id).child(UUID.randomUUID().toString());
 
 
             // adding listeners on upload
