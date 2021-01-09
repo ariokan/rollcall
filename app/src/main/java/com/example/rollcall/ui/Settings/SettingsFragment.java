@@ -44,12 +44,21 @@ public class SettingsFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db =FirebaseFirestore.getInstance();
     private CollectionReference usersRef =db.collection("users");
+    private  FirebaseUser user;
 
     public Button goback;
+
 
     private Context globalContext=null;
     Button logout;
     String user_id;
+    String firstname;
+    String lastname;
+    String mail;
+    String StudentNumber;
+    EditText FirstName;
+    EditText LastName;
+    TextView StudentNumber_;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,9 +66,12 @@ public class SettingsFragment extends Fragment {
        SettingsViewModel =
                 ViewModelProviders.of(this).get(SettingsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
-       EditText mail =(EditText)root.findViewById(R.id.email);
-       final EditText firstName=(EditText)root.findViewById(R.id.editTextTextPersonName);
-       //getData();
+        EditText mail =(EditText)root.findViewById(R.id.email);
+        FirstName=(EditText)root.findViewById(R.id.editTextTextPersonName);
+        LastName=(EditText)root.findViewById(R.id.surname);
+        StudentNumber_=(TextView)root.findViewById(R.id.StudentNumber);
+
+
 
        globalContext=this.getActivity();
        logout=(Button)root.findViewById(R.id.logOut);
@@ -76,9 +88,9 @@ public class SettingsFragment extends Fragment {
 
         mAuth=FirebaseAuth.getInstance();
         user_id=mAuth.getCurrentUser().getUid();
-       goback =(Button)root.findViewById(R.id.Goback);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        goback =(Button)root.findViewById(R.id.Goback);
+        user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
              email = user.getEmail();
             boolean emailVerified = user.isEmailVerified();
@@ -87,6 +99,10 @@ public class SettingsFragment extends Fragment {
 
         mail.setText(email);
         getData();
+
+        //
+        //
+
         return root;
     }
 
@@ -102,19 +118,25 @@ public class SettingsFragment extends Fragment {
                     String data ="";
                     for(QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots){
                         user user = documentSnapshot.toObject(user.class);
-                        String firstname = user.getFirstName();
-                        String lastname = user.getLastName();
-                        String mail = user.getMail();
-                        String SudentNumber = user.getStudentNumber();
-                       // Log.d("firstname",firstname);
+                         firstname = user.getFirstName();
+                         lastname = user.getLastName();
+                         mail = user.getMail();
+                         StudentNumber = user.getStudentNumber();
+
+                         FirstName.setText(firstname);
+                         LastName.setText(lastname);
+                        StudentNumber_.setText(StudentNumber);
+
 
                     }
                 }
             });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+
 
 }
