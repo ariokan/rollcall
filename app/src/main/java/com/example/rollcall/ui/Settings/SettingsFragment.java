@@ -49,9 +49,6 @@ public class SettingsFragment extends Fragment {
 
         mail.setText(email);
 
-
-
-
         return root;
     }
 }
