@@ -1,6 +1,7 @@
 package com.example.rollcall;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     String user_id;
     FirebaseUser user;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+
+
+
+        // LOG OUT YAPIP TEKRAR GİRİNCE SORUN OLUŞUYOR
         db= FirebaseFirestore.getInstance();
         user = myAuth.getInstance().getCurrentUser();
         Bundle extras = getIntent().getExtras();
@@ -63,23 +70,48 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        db.collection("users").document(user_id)
-                .set(userData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("TAG", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("TAG", "Error writing document", e);
-                    }
-                });
+        if(IsDataValid(Mail,Pass1,Name,Surname,Stdonumber)) {
+            db.collection("users").document(user_id)
+                    .set(userData)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("TAG", "DocumentSnapshot successfully written!");
+                            Toast.makeText(MainActivity.this, "Firestore success.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("TAG", "Error writing document", e);
+                        }
+                    });
 
 
+        }
 
+    }
+
+
+    private boolean IsDataValid(String mail, String pass1, String name, String surname, String stdonumber) {
+        if(TextUtils.isEmpty(mail)){
+
+            return false;
+        }
+        else if(TextUtils.isEmpty(name)){
+
+            return false;
+        }
+        else if( TextUtils.isEmpty(surname)){
+
+            return false;
+        }
+        else if(TextUtils.isEmpty(stdonumber) ){
+
+            return false;
+        }
+        return true;
 
     }
 
