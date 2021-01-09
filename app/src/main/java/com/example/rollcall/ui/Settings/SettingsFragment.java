@@ -28,7 +28,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -40,6 +42,7 @@ public class SettingsFragment extends Fragment {
     String uid;
     private FirebaseAuth mAuth;
     public Button goback;
+    private FirebaseFirestore db;
 
     private Context globalContext=null;
     Button logout;
@@ -68,6 +71,7 @@ public class SettingsFragment extends Fragment {
            }
        });
 
+        db= FirebaseFirestore.getInstance();
         mAuth=FirebaseAuth.getInstance();
         user_id=mAuth.getCurrentUser().getUid();
        goback =(Button)root.findViewById(R.id.Goback);
@@ -79,30 +83,12 @@ public class SettingsFragment extends Fragment {
              uid = user.getUid();
         }
 
-       //nameRef=db.collection("users");
-        //Query query=nameRef.whereEqualTo("firstName","Yiğitcan");
-        //firstName.setText((CharSequence) query);
 
 
-        // SONRADAN EKLEDİM ---------------------
-        // PUSH EDERKEN -------------------------
-        // DİKKAT ET ----------------------------
 
-        docRef=FirebaseFirestore.getInstance().collection("users").document("nKDWVTwHcVcjLJRukx6O");
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    DocumentSnapshot doc=task.getResult();
-                    if(doc.exists()){
-                        firstName.setText(user_id);
-                    }
-                    else {
-                        firstName.setText("anan");
-                    }
-                }
-            }
-        });
+
+
+
         mail.setText(email);
 
         return root;
