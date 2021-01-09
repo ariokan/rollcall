@@ -21,7 +21,9 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.rollcall.LogInScreen;
 import com.example.rollcall.R;
 import com.example.rollcall.ui.home.HomeFragment;
+import com.example.rollcall.user;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,22 +40,26 @@ public class SettingsFragment extends Fragment {
     private SettingsViewModel SettingsViewModel;
     String email;
     String uid;
+
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db =FirebaseFirestore.getInstance();
+    private CollectionReference usersRef =db.collection("users");
+
     public Button goback;
 
     private Context globalContext=null;
     Button logout;
     String user_id;
-    //CollectionReference nameRef;
-    DocumentReference docRef;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
        SettingsViewModel =
                 ViewModelProviders.of(this).get(SettingsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
        EditText mail =(EditText)root.findViewById(R.id.email);
        final EditText firstName=(EditText)root.findViewById(R.id.editTextTextPersonName);
-
+       //getData();
 
        globalContext=this.getActivity();
        logout=(Button)root.findViewById(R.id.logOut);
@@ -79,32 +85,36 @@ public class SettingsFragment extends Fragment {
              uid = user.getUid();
         }
 
-       //nameRef=db.collection("users");
-        //Query query=nameRef.whereEqualTo("firstName","Yiğitcan");
-        //firstName.setText((CharSequence) query);
-
-
-        // SONRADAN EKLEDİM ---------------------
-        // PUSH EDERKEN -------------------------
-        // DİKKAT ET ----------------------------
-
-        docRef=FirebaseFirestore.getInstance().collection("users").document("nKDWVTwHcVcjLJRukx6O");
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    DocumentSnapshot doc=task.getResult();
-                    if(doc.exists()){
-                        firstName.setText(user_id);
-                    }
-                    else {
-                        firstName.setText("anan");
-                    }
-                }
-            }
-        });
         mail.setText(email);
-
+        getData();
         return root;
     }
+
+
+    public void getData(){
+
+        try {
+            usersRef.whereEqualTo("mail",email)
+                    .get().
+                    addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    String data ="";
+                    for(QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots){
+                        user user = documentSnapshot.toObject(user.class);
+                        String firstname = user.getFirstName();
+                        String lastname = user.getLastName();
+                        String mail = user.getMail();
+                        String SudentNumber = user.getStudentNumber();
+                       // Log.d("firstname",firstname);
+
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
