@@ -140,7 +140,7 @@ public class SettingsFragment extends Fragment {
                         lastname = user.getLastName();
                         String mail = user.getMail();
                         String SudentNumber = user.getStudentNumber();
-                       // Log.d("firstname",firstname);
+
                         firstName.setText(firstname);
                         lastName.setText(lastname);
                         studentNumber.setText(SudentNumber);
