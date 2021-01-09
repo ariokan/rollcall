@@ -2,9 +2,9 @@ package com.example.rollcall;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -110,10 +110,11 @@ public class RegisterScreen extends AppCompatActivity {
         studentPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
+               /* Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);*/
+               selectImage(this);
 
             }
         });
@@ -163,6 +164,31 @@ public class RegisterScreen extends AppCompatActivity {
             }
         });
     }
+    private void selectImage(View.OnClickListener context){
+        final CharSequence[] options={"Take photo","Choose from gallery","Cancel"};
+        android.app.AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setTitle("Choose your profile picture");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (options[item].equals("Take photo")) {
+                    Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(takePicture, 0);
+
+                } else if (options[item].equals("Choose from gallery")) {
+                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(pickPhoto , 1);
+
+                } else if (options[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+
+    }
 
 
     private void uploadImage()
@@ -174,10 +200,11 @@ public class RegisterScreen extends AppCompatActivity {
                     = new ProgressDialog(RegisterScreen.this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             user_id=myAuth.getCurrentUser().getUid();
 
             // Defining the child of storageReference
-            StorageReference ref = storageReference.child("images/" ).child(user_id).child(UUID.randomUUID().toString());
+            StorageReference ref = storageReference.child("images/" ).child(user.getEmail());
 
 
             // adding listeners on upload
