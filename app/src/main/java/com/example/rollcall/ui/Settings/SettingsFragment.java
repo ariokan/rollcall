@@ -175,13 +175,14 @@ public class SettingsFragment extends Fragment {
                                 lastname = user.getLastName();
                                 String password=user.getPassword();
 
-                                Editable deneme=firstName.getText();
+                                Editable changedFirstName=firstName.getText();
+                                Editable changedLastname=lastName.getText();
                                 Map<String, Object> userData = new HashMap<>();
-                                userData.put("firstName",deneme.toString());
-                                userData.put("lastName",lastname);
-                                userData.put("mail",email);
-                                userData.put("studentNumber",SudentNumber);
-                                userData.put("password",password);
+                                userData.put("firstName",changedFirstName.toString());
+                                userData.put("lastName",changedLastname.toString());
+
+
+
 
 
                                 db.collection("users").document(user_id).update(userData).addOnSuccessListener(new OnSuccessListener<Void>() {

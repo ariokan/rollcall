@@ -63,7 +63,7 @@ public class CameraFragment extends Fragment {
     private Context globalContext=null;
     private Bitmap photoSelect;
     private Uri selectedImage;
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth=FirebaseAuth.getInstance();;
     StorageReference storageReference;
     Button saveButton;
     String user_id;
@@ -90,7 +90,7 @@ public class CameraFragment extends Fragment {
             }
         });
         globalContext=this.getActivity();
-        mAuth=FirebaseAuth.getInstance();
+
         user_id=mAuth.getCurrentUser().getUid();
         storageReference= FirebaseStorage.getInstance().getReference();
         TextView textcam=(TextView)root.findViewById(R.id.text_camera);
@@ -153,7 +153,9 @@ public class CameraFragment extends Fragment {
             // Defining the child of storageReference
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+
             StorageReference ref = storageReference.child("images/" ).child(user.getEmail());
+
 
 
             // adding listeners on upload
