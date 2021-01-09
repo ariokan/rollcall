@@ -35,6 +35,7 @@ import com.example.rollcall.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -150,8 +151,9 @@ public class CameraFragment extends Fragment {
             progressDialog.show();
 
             // Defining the child of storageReference
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-            StorageReference ref = storageReference.child("images/" + user_id).child(UUID.randomUUID().toString());
+            StorageReference ref = storageReference.child("images/" ).child(user.getEmail());
 
 
             // adding listeners on upload
