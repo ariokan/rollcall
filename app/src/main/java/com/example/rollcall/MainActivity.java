@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        // LOG OUT YAPIP TEKRAR GİRİNCE SORUN OLUŞUYOR
+
         db= FirebaseFirestore.getInstance();
         user = myAuth.getInstance().getCurrentUser();
         Bundle extras = getIntent().getExtras();
