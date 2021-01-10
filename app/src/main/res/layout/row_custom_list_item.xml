@@ -13,16 +13,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/dersAdi"
-            android:text="Computer Networks"
-            android:textSize="24dp"
+            android:text="courseName"
+            android:textSize="20dp"
             android:textColor="#222222"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/dersKodu"
-            android:text="BIL225"
-            android:textSize="18dp"
+            android:text="courseCode"
+            android:textSize="17dp"
             android:textColor="#222"
             />
 
@@ -30,8 +30,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/akademisyenAdi"
-            android:text="Halim Zaim"
-            android:textSize="16dp"
+            android:text="lecturer"
+            android:textSize="15dp"
             android:textColor="#000000"/>
 
 
