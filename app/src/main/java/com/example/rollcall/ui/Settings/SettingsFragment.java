@@ -60,17 +60,11 @@ public class SettingsFragment extends Fragment {
     public Button apply;
     private TextView studentNumber;
 
-
-
     private Context globalContext=null;
     Button logout;
     String user_id;
     String firstname;
     String lastname;
-
-
-
-
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -160,7 +154,6 @@ public class SettingsFragment extends Fragment {
 
         final DocumentReference docRef=db.collection("users").document(user_id);
 
-
         try {
             usersRef.whereEqualTo("mail",email)
                     .get().
@@ -180,10 +173,6 @@ public class SettingsFragment extends Fragment {
                                 Map<String, Object> userData = new HashMap<>();
                                 userData.put("firstName",changedFirstName.toString());
                                 userData.put("lastName",changedLastname.toString());
-
-
-
-
 
                                 db.collection("users").document(user_id).update(userData).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override

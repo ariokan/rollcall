@@ -20,7 +20,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,12 +31,13 @@ public class MainActivity extends AppCompatActivity {
     String user_id;
     FirebaseUser user;
 
-
+    final ArrayList <Course>  courseArrayList= new ArrayList <Course>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -44,11 +47,27 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        courseArrayList.add(new Course("Computer Networks","B123","Halim Zaim"));
+        courseArrayList.add(new Course("Data Mining","B125","Arzu Kakisim"));
+        courseArrayList.add(new Course("Cloud Computing ","B145","AlperÖzpınar"));
+        courseArrayList.add(new Course("Parallel Computing","B125","Turgay Altılar"));
+
+
+
 
 
 
         // LOG OUT YAPIP TEKRAR GİRİNCE SORUN OLUŞUYOR
         db= FirebaseFirestore.getInstance();
+        Map<String, Object> CourseData = new HashMap<>();
+        for(int i=0;i<=3;i++) {
+            CourseData.put("lectureName", courseArrayList.get(i).getLectureName());
+            CourseData.put("lectureCode", courseArrayList.get(i).getLectureCode());
+            CourseData.put("lecturerName", courseArrayList.get(i).getLecturerName());
+        }
+
+
+
         user = myAuth.getInstance().getCurrentUser();
         Bundle extras = getIntent().getExtras();
         String Name=extras.getString("name");
@@ -67,7 +86,15 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        for(int i=0;i<=3;i++) {
+            db.collection("users").document(user_id).collection("course").add(courseArrayList.get(i)).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
+                    Toast.makeText(MainActivity.this, "Firestore success.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
 
         if(IsDataValid(Mail,Pass1,Name,Surname,Stdonumber)) {
