@@ -119,7 +119,7 @@ public class SettingsFragment extends Fragment {
 
            }
        });
-      // getImage();
+
 
         db= FirebaseFirestore.getInstance();
         mAuth=FirebaseAuth.getInstance();
@@ -141,41 +141,6 @@ public class SettingsFragment extends Fragment {
 
 
 
-
-
-    public void getImage(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        StorageReference mImageRef =
-                FirebaseStorage.getInstance().getReference("image/ytc@gmail.com");
-
-       // GlideApp.with(globalContext /* context */)
-           //     .load(mImageRef)
-            //    .into(imageView);
-      /*  StorageReference mImageRef =
-                FirebaseStorage.getInstance().getReference("image/ytc@gmail.com");
-        final long ONE_MEGABYTE = 1024 * 1024;
-        mImageRef.getBytes(ONE_MEGABYTE)
-                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        DisplayMetrics dm = new DisplayMetrics();
-
-
-
-                        imageView.setMinimumHeight(dm.heightPixels);
-                        imageView.setMinimumWidth(dm.widthPixels);
-                        imageView.setImageBitmap(bm);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(globalContext,"FOTO ÇEKEMEDİ",Toast.LENGTH_SHORT).show();
-
-            }
-        });*/
-
-    }
 
     public void getData(){
 
