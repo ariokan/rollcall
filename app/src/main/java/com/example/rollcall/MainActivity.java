@@ -5,14 +5,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -20,9 +12,21 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth myAuth ;
     String user_id;
     FirebaseUser user;
+    private CollectionReference usersRef;
 
     final ArrayList <Course>  courseArrayList= new ArrayList <Course>();
 
@@ -53,11 +58,6 @@ public class MainActivity extends AppCompatActivity {
         courseArrayList.add(new Course("Parallel Computing","B125","Turgay Altılar"));
 
 
-
-
-
-
-
         db= FirebaseFirestore.getInstance();
         Map<String, Object> CourseData = new HashMap<>();
         for(int i=0;i<=3;i++) {
@@ -66,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
             CourseData.put("lecturerName", courseArrayList.get(i).getLecturerName());
         }
 
-
-
         user = myAuth.getInstance().getCurrentUser();
+        String userId =user.getUid();
+        usersRef =db.collection("users").document(userId).collection("course");
         Bundle extras = getIntent().getExtras();
         String Name=extras.getString("name");
         String Surname=extras.getString("surname");
@@ -86,15 +86,29 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        for(int i=0;i<=3;i++) {
-            db.collection("users").document(user_id).collection("course").add(courseArrayList.get(i)).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    Toast.makeText(MainActivity.this, "Firestore success.",
-                            Toast.LENGTH_SHORT).show();
+
+        usersRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                for(int i=0;i<=3;i++) {
+                    db.collection("users").document(user_id).collection("course").add(courseArrayList.get(i)).
+                            addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Toast.makeText(MainActivity.this, "Firestore.",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 }
-            });
-        }
+            }
+        });
+
+
 
 
         if(IsDataValid(Mail,Pass1,Name,Surname,Stdonumber)) {
@@ -104,8 +118,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d("TAG", "DocumentSnapshot successfully written!");
-                            Toast.makeText(MainActivity.this, "Firestore success.",
-                                    Toast.LENGTH_SHORT).show();
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -114,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
                             Log.w("TAG", "Error writing document", e);
                         }
                     });
-
 
         }
 

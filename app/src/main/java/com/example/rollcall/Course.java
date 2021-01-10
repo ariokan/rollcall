@@ -6,11 +6,15 @@ public class Course {
     private String lectureCode;
     private String lecturerName;
 
+
+    public Course() {
+    }
     public Course(String lectureName, String lectureCode, String lecturerName) {
         this.lectureName = lectureName;
         this.lectureCode = lectureCode;
         this.lecturerName = lecturerName;
     }
+
 
     public String getLectureName() {
         return lectureName;

@@ -127,6 +127,7 @@ public class RegisterScreen extends AppCompatActivity {
                 final String Pass1 =pass1.getText().toString();
                 final String Pass2 =pass2.getText().toString();
                 final String Name=name.getText().toString();
+
                 if(IsDataValid(Mail,Pass1,Pass2,Name,Surname,Stdonumber)){
                     myAuth.createUserWithEmailAndPassword(Mail, Pass1)
                             .addOnCompleteListener(RegisterScreen.this, new OnCompleteListener<AuthResult>() {

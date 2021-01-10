@@ -26,8 +26,13 @@ import com.example.rollcall.MainActivity;
 import com.example.rollcall.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,46 +50,46 @@ public class HomeFragment extends Fragment {
     String[] courseCode={"BIL235","BIL222","BIL131","BIL333"};
     int images[]={R.drawable.ic_home_black_24dp};
     final ArrayList<Course> courses = new ArrayList<>();
+     FirebaseUser user;
+    private CollectionReference usersRef;
 
 
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
+    public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
        homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
         listView=(ListView)root.findViewById(R.id.listView1);
 
-        courses.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courses.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courses.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courses.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courses.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courses.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courses.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courses.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courses.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courses.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courses.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courses.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courses.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courses.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courses.add(new Course("Computer Networks","B123","Halim Zaim"));
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId=user.getUid();
+        usersRef =db.collection("users").document(userId).collection("course");
 
-        CourseAdapter courseAdapter=new CourseAdapter(inflater,courses);
-        if(listView!=null){
-            listView.setAdapter(courseAdapter);
-        }
 
-        //adapter=new ArrayAdapter<String >(getActivity(),android.R.layout.simple_list_item_1,courseName);
-
-        //listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        usersRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(),"Clicked item at position" +position,Toast.LENGTH_SHORT).show();
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots){
+                    Course course = documentSnapshot.toObject(Course.class);
+                    courses.add(new Course(course.getLectureName(),course.getLectureCode(),course.getLecturerName()));
+                }
+                CourseAdapter courseAdapter = new CourseAdapter(inflater,courses);
+                listView.setAdapter(courseAdapter);
+            }
+    }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
             }
         });
+
+
+
+
 
         return root;
     }

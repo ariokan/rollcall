@@ -110,7 +110,6 @@ public class SettingsFragment extends Fragment {
                Toast.makeText(globalContext,"Oturum Kapatıldı",Toast.LENGTH_SHORT).show();
                Intent loginIntent=new Intent(getActivity(), LogInScreen.class);
                startActivity(loginIntent);
-
            }
        });
 
