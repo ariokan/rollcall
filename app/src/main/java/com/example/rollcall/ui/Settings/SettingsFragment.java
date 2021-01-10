@@ -46,9 +46,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,6 +68,8 @@ public class SettingsFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db =FirebaseFirestore.getInstance();
     private CollectionReference usersRef =db.collection("users");
+
+    private StorageReference mStorageReference;
 
 
     public Button goback;
@@ -119,6 +124,7 @@ public class SettingsFragment extends Fragment {
 
            }
        });
+       getImage();
 
 
         db= FirebaseFirestore.getInstance();
@@ -170,6 +176,34 @@ public class SettingsFragment extends Fragment {
         }
 
 
+
+    }
+
+    public void getImage(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
+        String path=user.getEmail();
+        mStorageReference=FirebaseStorage.getInstance().getReference().child("images/"+path);
+
+        try {
+            final File localFile=File.createTempFile(path,"jpg");
+            mStorageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(globalContext,"Picture retrieved",Toast.LENGTH_SHORT).show();
+                    Bitmap bitmap=BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    imageView.setImageBitmap(bitmap);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(globalContext,"Error Occurred",Toast.LENGTH_SHORT).show();
+                }
+            });
+        }catch (IOException e){
+            e.printStackTrace();
+        }
 
     }
 
