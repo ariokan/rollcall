@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        // LOG OUT YAPIP TEKRAR GİRİNCE SORUN OLUŞUYOR
+
         db= FirebaseFirestore.getInstance();
         Map<String, Object> CourseData = new HashMap<>();
         for(int i=0;i<=3;i++) {

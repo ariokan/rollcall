@@ -2,8 +2,11 @@ package com.example.rollcall.ui.Settings;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Registry;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
 import com.example.rollcall.LogInScreen;
 import com.example.rollcall.MainActivity;
 import com.example.rollcall.R;
@@ -39,15 +46,21 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SettingsFragment extends Fragment {
 
     private SettingsViewModel SettingsViewModel;
     String email;
     String uid;
+    private CircleImageView imageView;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db =FirebaseFirestore.getInstance();
@@ -76,6 +89,7 @@ public class SettingsFragment extends Fragment {
        firstName=(EditText)root.findViewById(R.id.editTextTextPersonName);
        lastName=(EditText)root.findViewById(R.id.surname);
        studentNumber=(TextView)root.findViewById(R.id.StudentNumber);
+       imageView=(CircleImageView)root.findViewById(R.id.student_photo);
        apply=(Button)root.findViewById(R.id.ApplyChanges);
        apply.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -100,6 +114,7 @@ public class SettingsFragment extends Fragment {
            }
        });
 
+
         db= FirebaseFirestore.getInstance();
         mAuth=FirebaseAuth.getInstance();
         user_id=mAuth.getCurrentUser().getUid();
@@ -117,6 +132,8 @@ public class SettingsFragment extends Fragment {
         getData();
         return root;
     }
+
+
 
 
     public void getData(){
