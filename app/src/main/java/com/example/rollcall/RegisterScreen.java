@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -37,6 +38,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -51,6 +53,8 @@ public class RegisterScreen extends AppCompatActivity {
     private Uri imageData;
     StorageReference storageReference;
     String user_id;
+    final ArrayList<Course> courseArrayList= new ArrayList <Course>();
+    private CollectionReference usersRef;
 
 
 
@@ -89,8 +93,6 @@ public class RegisterScreen extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
-
-
         myAuth = FirebaseAuth.getInstance();
 
         final EditText name = (EditText) findViewById(R.id.editTextTextPersonName);
@@ -101,7 +103,16 @@ public class RegisterScreen extends AppCompatActivity {
         final  EditText pass2 =(EditText)findViewById(R.id.editTextTextPassword2);
         storageReference= FirebaseStorage.getInstance().getReference();
 
-
+        courseArrayList.add(new Course("Computer Networks","B123","Halim Zaim"));
+        courseArrayList.add(new Course("Data Mining","B125","Arzu Kakisim"));
+        courseArrayList.add(new Course("Cloud Computing ","B145","AlperÖzpınar"));
+        courseArrayList.add(new Course("Parallel Computing","B125","Turgay Altılar"));
+        Map<String, Object> CourseData = new HashMap<>();
+        for(int i=0;i<=3;i++) {
+            CourseData.put("lectureName", courseArrayList.get(i).getLectureName());
+            CourseData.put("lectureCode", courseArrayList.get(i).getLectureCode());
+            CourseData.put("lecturerName", courseArrayList.get(i).getLecturerName());
+        }
 
 
         final Button  rbtn = (Button) findViewById(R.id.rbtn);
@@ -135,10 +146,12 @@ public class RegisterScreen extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
-                                        Log.d("yiyodo", "createUserWithEmail:success");
                                         FirebaseUser user = myAuth.getCurrentUser();
+                                        Log.d("Okanburayabak",myAuth.getUid() );
+                                        addCourse(myAuth.getUid());
                                         Toast.makeText(RegisterScreen.this, "Authentication success.",
                                                 Toast.LENGTH_SHORT).show();
+
                                         final Intent intent = new Intent(RegisterScreen.this, MainActivity.class);
 
                                         intent.putExtra("name",Name);
@@ -164,6 +177,19 @@ public class RegisterScreen extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void addCourse(String path){
+        usersRef =db.collection("users").document(path).collection("course");
+        for(int i=0;i<=3;i++) {
+            usersRef.add(courseArrayList.get(i)).
+                    addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+
+                        }
+                    });
+        }
     }
     private void selectImage(View.OnClickListener context){
         final CharSequence[] options={"Take photo","Choose from gallery","Cancel"};

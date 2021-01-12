@@ -24,9 +24,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firestore.v1beta1.WriteResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser user;
     private CollectionReference usersRef;
 
-    final ArrayList <Course>  courseArrayList= new ArrayList <Course>();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,19 +55,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        courseArrayList.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courseArrayList.add(new Course("Data Mining","B125","Arzu Kakisim"));
-        courseArrayList.add(new Course("Cloud Computing ","B145","AlperÖzpınar"));
-        courseArrayList.add(new Course("Parallel Computing","B125","Turgay Altılar"));
-
-
         db= FirebaseFirestore.getInstance();
-        Map<String, Object> CourseData = new HashMap<>();
-        for(int i=0;i<=3;i++) {
-            CourseData.put("lectureName", courseArrayList.get(i).getLectureName());
-            CourseData.put("lectureCode", courseArrayList.get(i).getLectureCode());
-            CourseData.put("lecturerName", courseArrayList.get(i).getLecturerName());
-        }
+
 
         user = myAuth.getInstance().getCurrentUser();
         String userId =user.getUid();
@@ -87,29 +79,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        usersRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                for(int i=0;i<=3;i++) {
-                    db.collection("users").document(user_id).collection("course").add(courseArrayList.get(i)).
-                            addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Toast.makeText(MainActivity.this, "Firestore.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                }
-            }
-        });
-
-
-
 
         if(IsDataValid(Mail,Pass1,Name,Surname,Stdonumber)) {
             db.collection("users").document(user_id)
@@ -131,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
 
     private boolean IsDataValid(String mail, String pass1, String name, String surname, String stdonumber) {
         if(TextUtils.isEmpty(mail)){

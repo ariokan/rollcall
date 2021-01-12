@@ -45,9 +45,7 @@ public class HomeFragment extends Fragment {
     //SearchView searchView;
    // ArrayAdapter<String> adapter;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-   // String[] courseName={"Veri Madenciliği","Bilişim Tasarım Projesi","Paralel Bilgisayarlar","Bulut Bilişim"};
-    String[] teacherName={"Arzu Kakışım","Arzu Kakışım","Turgay Altılar","Alper Özpınar"};
-    String[] courseCode={"BIL235","BIL222","BIL131","BIL333"};
+
     int images[]={R.drawable.ic_home_black_24dp};
     final ArrayList<Course> courses = new ArrayList<>();
      FirebaseUser user;
@@ -86,10 +84,6 @@ public class HomeFragment extends Fragment {
 
             }
         });
-
-
-
-
 
         return root;
     }

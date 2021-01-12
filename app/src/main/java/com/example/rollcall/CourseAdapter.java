@@ -42,7 +42,7 @@ public class CourseAdapter extends BaseAdapter {
         Course course =courseArrayList.get(position);
         courseName.setText(course.getLectureName());
         courseCode.setText(course.getLectureCode());
-        lecturer.setText(course.getLectureName());
+        lecturer.setText(course.getLecturerName());
 
 
         return convertView ;
