@@ -2,6 +2,7 @@ package com.example.rollcall.ui.Camera;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,6 +42,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -70,7 +72,6 @@ public class CameraFragment extends Fragment {
 
 
     View view;
-
     LinearLayoutManager manager;
     ArrayList<HashMap<String, String>> userDetail = new ArrayList<>();
     HashMap<String, String> data;
@@ -93,20 +94,13 @@ public class CameraFragment extends Fragment {
 
         user_id=mAuth.getCurrentUser().getUid();
         storageReference= FirebaseStorage.getInstance().getReference();
-        TextView textcam=(TextView)root.findViewById(R.id.text_camera);
-        textcam.setText(user_id);
 
         imagCapture = (CircleImageView) root.findViewById(R.id.circleImage);
         button = (Button) root.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 selectImage(getActivity());
-
-
-
-
             }
         });
 
@@ -126,6 +120,7 @@ public class CameraFragment extends Fragment {
                 if (options[item].equals("Take photo")) {
                     Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(takePicture, 0);
+
 
                 } else if (options[item].equals("Choose from gallery")) {
                     Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -201,6 +196,13 @@ public class CameraFragment extends Fragment {
         }
     }
 
+    private Uri getImageUri(Context applicationContext, Bitmap photo) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(globalContext.getContentResolver(), photo, "Title", null);
+        return Uri.parse(path);
+    }
+
 
 
     @Override
@@ -211,9 +213,13 @@ public class CameraFragment extends Fragment {
             switch (requestCode) {
                 case 0:
                     if (resultCode == RESULT_OK && data != null) {
-                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
-                        imagCapture.setImageBitmap(selectedImage);
+
+                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                        imagCapture.setImageBitmap(bitmap);
+                        Uri tempUri = getImageUri(globalContext.getApplicationContext(), bitmap);
+                        selectedImage=tempUri;
                         uploadImage();
+
                     }
 
                     break;
