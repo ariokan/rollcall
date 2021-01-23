@@ -38,8 +38,11 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -94,6 +97,9 @@ public class RegisterScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
         myAuth = FirebaseAuth.getInstance();
+        String[] attendancearr = {"0","0","0","0","0","0","0","0","0","0","0","0",};
+
+        List<String> attendance = Arrays.asList(attendancearr);
 
         final EditText name = (EditText) findViewById(R.id.editTextTextPersonName);
         final EditText surname = (EditText) findViewById(R.id.surname);
@@ -103,10 +109,10 @@ public class RegisterScreen extends AppCompatActivity {
         final  EditText pass2 =(EditText)findViewById(R.id.editTextTextPassword2);
         storageReference= FirebaseStorage.getInstance().getReference();
 
-        courseArrayList.add(new Course("Computer Networks","B123","Halim Zaim"));
-        courseArrayList.add(new Course("Data Mining","B125","Arzu Kakisim"));
-        courseArrayList.add(new Course("Cloud Computing ","B145","AlperÖzpınar"));
-        courseArrayList.add(new Course("Parallel Computing","B125","Turgay Altılar"));
+        courseArrayList.add(new Course("Computer Networks","B123","Halim Zaim",attendance));
+        courseArrayList.add(new Course("Data Mining","B125","Arzu Kakisim",attendance));
+        courseArrayList.add(new Course("Cloud Computing ","B145","AlperÖzpınar",attendance));
+        courseArrayList.add(new Course("Parallel Computing","B125","Turgay Altılar",attendance));
         Map<String, Object> CourseData = new HashMap<>();
         for(int i=0;i<=3;i++) {
             CourseData.put("lectureName", courseArrayList.get(i).getLectureName());

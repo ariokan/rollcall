@@ -5,52 +5,75 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.rollcall.Course;
+import com.example.rollcall.CourseAdapter;
+import com.example.rollcall.CourseAttendance;
 import com.example.rollcall.R;
+import com.example.rollcall.ui.CourseAttendanceAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.common.net.MediaType;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.UUID;
+import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import retrofit2.http.Url;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -65,38 +88,81 @@ public class CameraFragment extends Fragment {
     private Uri selectedImage;
     private FirebaseAuth mAuth=FirebaseAuth.getInstance();;
     StorageReference storageReference;
-    Button saveButton;
+    Button saveButton,attend;
     String user_id;
-
-
+    ListView list;
     View view;
 
     LinearLayoutManager manager;
-    ArrayList<HashMap<String, String>> userDetail = new ArrayList<>();
+    ArrayList<Course> courses = new ArrayList<Course>();
     HashMap<String, String> data;
     private CircleImageView imagCapture;
+    FirebaseUser user;
+    private CollectionReference usersRef;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    String url = "";
+    String veri_string;
+    public void volleyPost(){
+        String postUrl = "http://10.0.2.2:5001/face_rec";
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("mail", "guleryigitcan@gmail.com");
 
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+               Log.d("Response", response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.d("Response", error.getMessage());
+            }
+        });
+
+
+        requestQueue.add(jsonObjectRequest);
+
+    }
+
+
+
+    public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         dashboardViewModel =
                 ViewModelProviders.of(this).get(CameraViewModel.class);
         View root = inflater.inflate(R.layout.fragment_camera, container, false);
-        final TextView textView = root.findViewById(R.id.text_camera);
+
         dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
+
             }
         });
         globalContext=this.getActivity();
 
         user_id=mAuth.getCurrentUser().getUid();
         storageReference= FirebaseStorage.getInstance().getReference();
-        TextView textcam=(TextView)root.findViewById(R.id.text_camera);
-        textcam.setText(user_id);
-
         imagCapture = (CircleImageView) root.findViewById(R.id.circleImage);
+
+
+        attend =(Button) root.findViewById(R.id.attend);
+        attend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                volleyPost();
+            }
+        });
+
         button = (Button) root.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,8 +170,31 @@ public class CameraFragment extends Fragment {
 
                 selectImage(getActivity());
 
-
-
+            }
+        });
+        list =(ListView)root.findViewById(R.id.listView2);
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId=user.getUid();
+        usersRef =db.collection("users").document(userId).collection("course");
+        usersRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        String data ="";
+                        for(QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots){
+                            Course course = documentSnapshot.toObject(Course.class);
+                            for(String tag: course.getAttendance()){
+                                data+="\n-"+tag;
+                            }
+                            courses.add(new Course(course.getLectureName(),course.getLectureCode(),course.getLecturerName(), Collections.singletonList(data)));
+                        }
+                        CourseAttendanceAdapter courseAttendanceAdapter = new CourseAttendanceAdapter(inflater,courses);
+                        list.setAdapter(courseAttendanceAdapter);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
 
             }
         });
@@ -144,22 +233,16 @@ public class CameraFragment extends Fragment {
     {
         if (selectedImage != null) {
 
-            // Code for showing progressDialog while uploading
+
             final ProgressDialog progressDialog
                     = new ProgressDialog(globalContext);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            // Defining the child of storageReference
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
 
             StorageReference ref = storageReference.child("images/" ).child(user.getEmail());
 
-
-
-            // adding listeners on upload
-            // or failure of image
             ref.putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 
                                 @Override
@@ -167,8 +250,6 @@ public class CameraFragment extends Fragment {
                                         UploadTask.TaskSnapshot taskSnapshot)
                                 {
 
-                                    // Image uploaded successfully
-                                    // Dismiss dialog
                                     progressDialog.dismiss();
                                     Toast.makeText(globalContext,
                                                     "Image Uploaded!!",
@@ -180,7 +261,7 @@ public class CameraFragment extends Fragment {
                         public void onFailure(@NonNull Exception e)
                         {
 
-                            // Error, Image not uploaded
+
                             progressDialog.dismiss();
                             Toast.makeText(globalContext,"Failed"+e.getMessage(),Toast.LENGTH_SHORT).show();
                             Toast.makeText(globalContext, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();

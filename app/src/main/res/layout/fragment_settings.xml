@@ -116,15 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal">
-            <Button
-                android:id="@+id/Goback"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="100dp"
-                android:text="Go Back"></Button>
+
             <Button
                 android:id="@+id/ApplyChanges"
                 android:layout_width="wrap_content"

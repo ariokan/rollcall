@@ -1,19 +1,25 @@
 package com.example.rollcall;
 
+import java.util.List;
+
 public class Course {
 
     private String lectureName;
     private String lectureCode;
     private String lecturerName;
+    List<String> attendance;
 
 
     public Course() {
     }
-    public Course(String lectureName, String lectureCode, String lecturerName) {
+    public Course(String lectureName, String lectureCode, String lecturerName,List<String> attendance) {
         this.lectureName = lectureName;
         this.lectureCode = lectureCode;
         this.lecturerName = lecturerName;
+        this.attendance = attendance;
     }
+
+
 
 
     public String getLectureName() {
@@ -38,5 +44,9 @@ public class Course {
 
     public void setLecturerName(String lecturerName) {
         this.lecturerName = lecturerName;
+    }
+
+    public List<String> getAttendance() {
+        return attendance;
     }
 }

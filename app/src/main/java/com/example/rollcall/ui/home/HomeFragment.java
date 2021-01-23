@@ -44,13 +44,13 @@ public class HomeFragment extends Fragment {
     ListView listView;
     //SearchView searchView;
    // ArrayAdapter<String> adapter;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     int images[]={R.drawable.ic_home_black_24dp};
     final ArrayList<Course> courses = new ArrayList<>();
-     FirebaseUser user;
+    FirebaseUser user;
     private CollectionReference usersRef;
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(QueryDocumentSnapshot documentSnapshot:queryDocumentSnapshots){
                     Course course = documentSnapshot.toObject(Course.class);
-                    courses.add(new Course(course.getLectureName(),course.getLectureCode(),course.getLecturerName()));
+                    courses.add(new Course(course.getLectureName(),course.getLectureCode(),course.getLecturerName(),course.getAttendance()));
                 }
                 CourseAdapter courseAdapter = new CourseAdapter(inflater,courses);
                 listView.setAdapter(courseAdapter);

@@ -104,8 +104,6 @@ public class SettingsFragment extends Fragment {
        });
 
 
-
-
        globalContext=this.getActivity();
        logout=(Button)root.findViewById(R.id.logOut);
        logout.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +121,7 @@ public class SettingsFragment extends Fragment {
         db= FirebaseFirestore.getInstance();
         mAuth=FirebaseAuth.getInstance();
         user_id=mAuth.getCurrentUser().getUid();
-       goback =(Button)root.findViewById(R.id.Goback);
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
