@@ -58,6 +58,7 @@ import com.google.firebase.storage.UploadTask;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -90,6 +91,7 @@ public class CameraFragment extends Fragment {
     StorageReference storageReference;
     Button saveButton,attend;
     String user_id;
+    String user_mail;
     ListView list;
     View view;
 
@@ -100,16 +102,16 @@ public class CameraFragment extends Fragment {
     FirebaseUser user;
     private CollectionReference usersRef;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String res ;
 
-    String url = "";
-    String veri_string;
-    public void volleyPost(){
+
+    public void volleyPost(String mail){
         String postUrl = "http://10.0.2.2:5001/face_rec";
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
         JSONObject postData = new JSONObject();
         try {
-            postData.put("mail", "guleryigitcan@gmail.com");
+            postData.put("mail", mail);
 
 
         } catch (JSONException e) {
@@ -119,13 +121,19 @@ public class CameraFragment extends Fragment {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-               Log.d("Response", response.toString());
+                try {
+                    Log.d("Response", response.getString("result"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 Log.d("Response", error.getMessage());
+                Toast.makeText(globalContext,"Bilinmeyen bir hata oluştu",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -149,17 +157,18 @@ public class CameraFragment extends Fragment {
             }
         });
         globalContext=this.getActivity();
-
+        user = FirebaseAuth.getInstance().getCurrentUser();
         user_id=mAuth.getCurrentUser().getUid();
         storageReference= FirebaseStorage.getInstance().getReference();
         imagCapture = (CircleImageView) root.findViewById(R.id.circleImage);
 
+        user_mail= user.getEmail();
 
         attend =(Button) root.findViewById(R.id.attend);
         attend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                volleyPost();
+                volleyPost(user_mail);
             }
         });
 
@@ -173,7 +182,7 @@ public class CameraFragment extends Fragment {
             }
         });
         list =(ListView)root.findViewById(R.id.listView2);
-        user = FirebaseAuth.getInstance().getCurrentUser();
+
         String userId=user.getUid();
         usersRef =db.collection("users").document(userId).collection("course");
         usersRef
@@ -196,6 +205,13 @@ public class CameraFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Exception e) {
 
+            }
+        });
+
+        list.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                volleyPost(user_mail);
             }
         });
 
@@ -227,6 +243,13 @@ public class CameraFragment extends Fragment {
         });
         builder.show();
 
+    }
+
+    private Uri getImageUri(Context applicationContext, Bitmap photo) {
+               ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+               photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                String path = MediaStore.Images.Media.insertImage(globalContext.getContentResolver(), photo, "Title", null);
+                return Uri.parse(path);
     }
 
     private void uploadImage()
@@ -292,9 +315,12 @@ public class CameraFragment extends Fragment {
             switch (requestCode) {
                 case 0:
                     if (resultCode == RESULT_OK && data != null) {
-                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
-                        imagCapture.setImageBitmap(selectedImage);
-                        uploadImage();
+                                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                                imagCapture.setImageBitmap(bitmap);
+                                Uri tempUri = getImageUri(globalContext.getApplicationContext(), bitmap);
+                                selectedImage=tempUri;
+                                 uploadImage();
+
                     }
 
                     break;

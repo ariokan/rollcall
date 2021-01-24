@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.rollcall.Course;
 import com.example.rollcall.R;
 
+
 import java.util.ArrayList;
 
 public class CourseAttendanceAdapter extends BaseAdapter
@@ -46,7 +47,8 @@ public class CourseAttendanceAdapter extends BaseAdapter
         courseName.setText(course.getLectureName());
         courseCode.setText(course.getLectureCode());
         lecturer.setText(course.getLecturerName());
-        Button katilbtn = (Button) convertView.findViewById(R.id.katilbtnA);
+
+
 
         Course courseAttendance = CourseAttendanceArrayList.get(position);
         courseName.setText(courseAttendance.getLectureName());

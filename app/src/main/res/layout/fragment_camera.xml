@@ -17,20 +17,25 @@
         android:src="@drawable/ic_action_name"
 
         ></de.hdodenhof.circleimageview.CircleImageView>
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:text="Take Pic"
-        android:layout_gravity="center"
-        android:clickable="false"/>
-    <Button
-        android:id="@+id/attend"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="attend" />
+        android:orientation="horizontal">
+    <Button
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Take Pic"
+        android:layout_gravity="center"
+        android:clickable="false"
+        android:layout_weight="1"/>
+    <Button
+        android:id="@+id/attend"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="attend"
+        android:layout_weight="1"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,11 +46,10 @@
         <ListView
             android:id="@+id/listView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="100dp"
-            android:clickable="true"/>
+            android:layout_height="350dp"
+            android:clickable="true"
+            android:paddingBottom="100dp" />
     </LinearLayout>
-
 
 
 

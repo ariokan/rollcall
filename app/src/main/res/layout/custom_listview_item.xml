@@ -45,14 +45,7 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/katilbtnA"
-            android:layout_width="10dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="katil"
-            android:layout_gravity="center"
-            />
+
     </LinearLayout>
 
 
